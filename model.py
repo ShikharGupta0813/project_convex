@@ -50,6 +50,7 @@ def query():
     print(user_query)
     ans = predict(user_query)
     print(ans)
+    str(ans)
     return jsonify({"ans": ans})
 
 if __name__ == '__main__':
