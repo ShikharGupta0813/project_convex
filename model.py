@@ -16,42 +16,26 @@ llm = LlamaCPP(
     # you can set the path to a pre-downloaded model instead of model_url
     model_path="./Main-Model-7.2B-Q5_K_M.gguf",
 )
+
 DOCUMENT_FOLDER = 'documents/'
 index = load_documents_and_create_index(DOCUMENT_FOLDER)
 
 
-def predict(query):
-    # Load documents from the folder and create the index (RAG setup)
-    #DOCUMENT_FOLDER = 'documents/' # Replace with your folder path
-
-    # Initialize the index at startup
-   # index = load_documents_and_create_index(DOCUMENT_FOLDER)
-
+def predict(question):
     # Set up the query engine and run the query
     query_engine = index.as_query_engine(llm=llm)
-    response = query_engine.query(query)
+    response = query_engine.query(question)
 
     # Return the model's response
     return response
 
 
-# query="what this document is all about"
-# query_engine = index.as_query_engine()
-# response = query_engine.query(query)
-# print(response,end='',flush=True)
-
-#response = predict("what is the benefits of this idea in simple language")
-#print(response)
-
 @app.route('/query', methods=['POST'])
 def query():
     data = request.json
     user_query = data["query"]
-    print(user_query)
     ans = predict(user_query)
-    print(ans)
-    str(ans)
-    return jsonify({"ans": ans})
+    return jsonify({"ans": str(ans)})
 
 if __name__ == '__main__':
     app.run(debug=True)

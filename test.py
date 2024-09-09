@@ -1,5 +1,4 @@
 import requests
-import json
 
 # URL of the server where you are sending the POST request
 url = 'http://127.0.0.1:5000/query'
