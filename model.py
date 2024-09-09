@@ -11,16 +11,16 @@ def load_documents_and_create_index(folder_path):
     embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")  # Your embedding model
     return VectorStoreIndex.from_documents(documents, embed_model=embed_model)
 
+
+llm = LlamaCPP(
+    # you can set the path to a pre-downloaded model instead of model_url
+    model_path="./Main-Model-7.2B-Q5_K_M.gguf",
+)
 DOCUMENT_FOLDER = 'documents/'
 index = load_documents_and_create_index(DOCUMENT_FOLDER)
 
 
 def predict(query):
-    llm = LlamaCPP(
-        # you can set the path to a pre-downloaded model instead of model_url
-        model_path="./Main-Model-7.2B-Q5_K_M.gguf",
-    )
-
     # Load documents from the folder and create the index (RAG setup)
     #DOCUMENT_FOLDER = 'documents/' # Replace with your folder path
 
@@ -39,8 +39,9 @@ def predict(query):
 # query_engine = index.as_query_engine()
 # response = query_engine.query(query)
 # print(response,end='',flush=True)
-response = predict("what is the benefits of this idea in simple language")
-print(response)
+
+#response = predict("what is the benefits of this idea in simple language")
+#print(response)
 
 @app.route('/query', methods=['POST'])
 def query():
