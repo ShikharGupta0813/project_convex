@@ -5,24 +5,26 @@ from llama_index.llms.llama_cpp import LlamaCPP
 from flask import Flask,request,jsonify
 app = Flask(__name__)
 
-# Load your documents and build the index
-def load_documents_and_create_index(folder_path):
-    documents = SimpleDirectoryReader(folder_path).load_data()
-    embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")  # Your embedding model
-    return VectorStoreIndex.from_documents(documents, embed_model=embed_model)
+global index
 
+embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")  # Your embedding model
 
 llm = LlamaCPP(
     # you can set the path to a pre-downloaded model instead of model_url
     model_path="./Main-Model-7.2B-Q5_K_M.gguf",
 )
 
-DOCUMENT_FOLDER = 'documents/'
-index = load_documents_and_create_index(DOCUMENT_FOLDER)
+@app.route("/recreateVectorStoreIndex")
+# Load your documents and build the index
+def load_documents_and_create_index():
+    documents = SimpleDirectoryReader('documents/').load_data()
+    global index
+    index = VectorStoreIndex.from_documents(documents, embed_model=embed_model)
 
 
 def predict(question):
     # Set up the query engine and run the query
+    global index
     query_engine = index.as_query_engine(llm=llm)
     response = query_engine.query(question)
 
