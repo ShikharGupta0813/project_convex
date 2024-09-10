@@ -2,13 +2,16 @@ import requests
 
 # URL of the server where you are sending the POST request
 url = 'http://127.0.0.1:5000/query'
+url2='http://127.0.0.1:5000/recreateVectorStoreIndex'
 
 # JSON data to be sent in the request
 data = {
     "query": "what is the benefit of this idea"
 }
 
+requests.get(url2)
 # Send POST request with JSON data
+
 response = requests.post(url, json=data)
 
 # Print the response from the server
