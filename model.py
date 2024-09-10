@@ -20,7 +20,7 @@ def load_documents_and_create_index():
     documents = SimpleDirectoryReader('documents/').load_data()
     global index
     index = VectorStoreIndex.from_documents(documents, embed_model=embed_model)
-
+    return jsonify({"success":"success"})
 
 def predict(question):
     # Set up the query engine and run the query
